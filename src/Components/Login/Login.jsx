@@ -5,10 +5,12 @@ import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
 import './Login.css'
 import { AuthContext } from '../../Providers/AuthProvider';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
     const { loginUser } = useContext(AuthContext)
     const { register, handleSubmit, formState: { errors } } = useForm();
     const captchaInputRef = useRef(null);
@@ -42,6 +44,9 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
+                setTimeout(() => {
+                    navigate(location?.state?.from || '/');
+                }, 1700);
             })
             .catch(err => {
                 Swal.fire({

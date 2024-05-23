@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import './SignUp.css'
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +7,8 @@ import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
 
 const SignUp = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
     const { createNewUser, updateUserProfile } = useContext(AuthContext)
     const { register, handleSubmit, formState: { errors }, watch, trigger } = useForm();
 
@@ -38,6 +40,9 @@ const SignUp = () => {
                             showConfirmButton: false,
                             timer: 1500
                         });
+                        setTimeout(() => {
+                            navigate(location?.state?.from || '/');
+                        }, 1700);
                         console.log('Profile Updated')
                     })
                     .catch(err => {
