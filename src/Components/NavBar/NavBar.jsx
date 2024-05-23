@@ -1,9 +1,12 @@
 import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
+import { TiShoppingCart } from "react-icons/ti";
+import useCart from "../../Hooks/useCart";
 
 
 const NavBar = () => {
+    const [cart]=useCart()
     const { user, logOutUser } = useContext(AuthContext)
 
     const handleLogOut = () => {
@@ -14,10 +17,17 @@ const NavBar = () => {
             .catch(err => console.log(err.message))
     }
 
-    const navOptions = <div className=" flex gap-5 text-lg">
+    const navOptions = <div className=" flex flex-col lg:flex-row gap-5 text-lg items-center">
         <NavLink to={`/`}>Home</NavLink>
         <NavLink to={`/menu`}>Menu</NavLink>
         <NavLink to={`/shop/salad`}>Shop</NavLink>
+        <NavLink to={`/secret`}>Secret</NavLink>
+        <NavLink to={`/dashboard/cart`}>
+            <button className="btn">
+                <TiShoppingCart className="text-2xl"/>
+                <div className="badge badge-secondary">+{ cart.length}</div>
+            </button>
+        </NavLink>
     </div>
     return (
         <div className="navbar bg-black bg-opacity-30 text-white  fixed z-10 max-w-screen-xl mx-auto">
