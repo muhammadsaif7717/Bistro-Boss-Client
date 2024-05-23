@@ -1,102 +1,138 @@
-
-import { useContext } from 'react';
-import { AuthContext } from '../../Providers/AuthProvider';
 import { Link } from 'react-router-dom';
-
+import { useForm } from 'react-hook-form';
+import './SignUp.css'
+import { Helmet } from 'react-helmet-async';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../../Providers/AuthProvider';
+import Swal from 'sweetalert2';
 
 const SignUp = () => {
     const { createNewUser, updateUserProfile } = useContext(AuthContext)
+    const { register, handleSubmit, formState: { errors }, watch, trigger } = useForm();
 
-    const handleFormSubmit = e => {
-        e.preventDefault();
-        const form = e.target;
-        const name = form.name.value;
-        const email = form.email.value;
-        const password = form.password.value;
-        const photo = form.photo.value;
+    const password = watch('password');
+
+    useEffect(() => {
+        if (password) {
+            trigger('password');
+        }
+    }, [password, trigger]);
 
 
-        //create user
-        createNewUser(email, password)
+    const onSubmit = (data) => {
+        console.log(data);
+
+        // create new user
+        createNewUser(data.email, data.password)
             .then(res => {
                 console.log('New User Created', res.user)
             })
             .then(() => {
                 // update user profile
-                updateUserProfile(name, photo)
+                updateUserProfile(data.name, data.photo)
                     .then(() => {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "New User Created",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                         console.log('Profile Updated')
                     })
-                    .catch(err => console.log(err.message))
+                    .catch(err => {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                        });
+                        console.log(err.message)
+                    })
             })
             .catch(err => console.log(err.message))
-        form.reset()
 
-    }
+    };
 
     return (
-        <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content flex-col  md:flex-row-reverse">
-                <div className="text-center lg:text-left">
-                    <h1 className="text-5xl font-bold">Sign Up now!</h1>
-                    <p className="py-6 lg:w-[75%]">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                </div>
-                <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                    <form onSubmit={handleFormSubmit} className="card-body pb-5">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Name</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Name"
-                                className="input input-bordered"
-                                required />
+        <>
+            <Helmet>
+                <title>Bistro Boss | Sign Up</title>
+            </Helmet>
+            <div className="hero min-h-screen bg-base-200 sign-up-container">
+                <div className="hero-content flex justify-center items-center w-full">
+                    <div className="card p-5 w-full max-w-sm shadow-2xl bg-base-100">
+                        <form onSubmit={handleSubmit(onSubmit)} className="card-body p-0 gap-0 w-full">
+                            <h1 className="text-3xl lg:text-5xl font-bold text-center">Sign Up now!</h1>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Name</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    {...register("name", { required: "Name is required" })}
+                                    placeholder="Name"
+                                    className="input input-bordered"
+                                />
+                                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Email</span>
+                                </label>
+                                <input
+                                    type="email"
+                                    {...register("email", { required: "Email is required" })}
+                                    placeholder="Email"
+                                    className="input input-bordered"
+                                />
+                                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Password</span>
+                                </label>
+                                <input
+                                    type="password"
+                                    {...register("password", {
+                                        required: "Password is required",
+                                        minLength: { value: 6, message: "Password must be at least 6 characters long" },
+                                        maxLength: { value: 20, message: "Password must not exceed 20 characters" },
+                                        validate: {
+                                            hasUpperCase: value => /[A-Z]/.test(value) || "Password must include at least one uppercase letter",
+                                            hasLowerCase: value => /[a-z]/.test(value) || "Password must include at least one lowercase letter",
+                                            hasNumber: value => /\d/.test(value) || "Password must include at least one number",
+                                            hasSpecialChar: value => /[@$!%*?&]/.test(value) || "Password must include at least one special character"
+                                        }
+                                    })}
+                                    placeholder="Password"
+                                    className="input input-bordered"
+                                />
+                                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Photo URL</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    {...register("photo", { required: "Photo URL is required" })}
+                                    placeholder="Photo URL here..."
+                                    className="input input-bordered"
+                                />
+                                {errors.photo && <p className="text-red-500 text-xs mt-1">{errors.photo.message}</p>}
+                            </div>
+                            <div className="form-control mt-6">
+                                <input type="submit" value="Sign Up" className="btn btn-primary" />
+                            </div>
+                        </form>
+                        <div className='flex justify-center w-full mt-4'>
+                            <span>Already have an account? <Link to="/login" className='text-blue-600'>Login</Link></span>
                         </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                className="input input-bordered"
-                                required />
-                        </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Password</span>
-                            </label>
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                className="input input-bordered"
-                                required />
-                        </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Photo URL</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="photo"
-                                placeholder="Photo URL here..."
-                                className="input input-bordered"
-                                required />
-                        </div>
-                        <div className="form-control mt-6">
-                            <input type="submit" value="Login" className="btn btn-primary" />
-                        </div>
-                    </form>
-                    <div className='flex justify-center w-full pb-10'>
-                        <span>Already have account? Please <Link to={`/login`} className='text-blue-600'>Login</Link></span>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
