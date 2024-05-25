@@ -3,9 +3,9 @@ import useCart from "../../../Hooks/useCart";
 import Swal from "sweetalert2";
 import useAxiosSecret from "../../../Hooks/useAxiosSecret";
 
-const Cart = () => {
+const MyCart = () => {
     const axiosSecure = useAxiosSecret()
-    const [cart,refetch] = useCart();
+    const [cart, refetch] = useCart();
     const totalPrice = cart.reduce((total, item) => total + item.price, 0);
 
 
@@ -23,13 +23,13 @@ const Cart = () => {
                 // delete from firebase
                 axiosSecure.delete(`/carts/${id}`)
                     .then(res => {
-                        if (res.data.deletedCount>0) {
+                        if (res.data.deletedCount > 0) {
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your file has been deleted.",
                                 icon: "success"
                             });
-                            
+
                             //refetch to refresh
                             refetch();
                         }
@@ -95,4 +95,4 @@ const Cart = () => {
     );
 };
 
-export default Cart;
+export default MyCart;

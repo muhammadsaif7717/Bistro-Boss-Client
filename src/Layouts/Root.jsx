@@ -5,7 +5,6 @@ import Footer from "../Components/Footer/Footer";
 
 const Root = () => {
     const location = useLocation();
-    console.log(location)
     const ifLoginPage = location.pathname.includes('login')
     const ifSignUpPage = location.pathname.includes('sign-up')
     return (

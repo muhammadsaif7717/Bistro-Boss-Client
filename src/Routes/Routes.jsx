@@ -8,9 +8,20 @@ import SignUp from "../Components/SignUp/SignUp";
 import PrivateRoute from "./PrivateRoute";
 import Secret from "../Components/Secret/Secret";
 import Dashboard from "../Layouts/Dashboard";
-import Cart from "../Components/Dashboard/Cart/Cart";
+import MyCart from "../Components/Dashboard/MyCart/MyCart";
+import AllUsers from "../Components/Dashboard/AllUsers/AllUsers";
+import ManageBooking from "../Components/Dashboard/ManageBooking/ManageBooking";
+import AdminHome from "../Components/Dashboard/AdminHome/AdminHome";
+import AddItem from "../Components/Dashboard/AddItem/AddItem";
+import ManageItem from "../Components/Dashboard/ManageItem/ManageItem";
+import UserHome from "../Components/Dashboard/UserHome/UserHome";
+import Reservation from "../Components/Dashboard/Reservation/Reservation";
+import PaymentHistory from "../Components/Dashboard/PaymentHistory/PaymentHistory";
+import AddReview from "../Components/Dashboard/AddReview/AddReview";
+import MyBooking from "../Components/Dashboard/MyBooking/MyBooking";
 
 const router = createBrowserRouter([
+    //Ui routes
     {
         path: "/",
         element: <Root></Root>,
@@ -41,14 +52,60 @@ const router = createBrowserRouter([
             },
         ]
     },
+
+    //dashboard
     {
         path: '/dashboard',
         element: <Dashboard></Dashboard>,
         children: [
+
+            //Admin routes
             {
-                path: 'cart',
-                element: <Cart></Cart>,
-            }
+                path: 'admin-home',
+                element: <AdminHome></AdminHome>,
+            },
+            {
+                path: 'add-item',
+                element: <AddItem></AddItem>,
+            },
+            {
+                path: 'manage-item',
+                element: <ManageItem></ManageItem>,
+            },
+            {
+                path: 'manage-booking',
+                element: <ManageBooking></ManageBooking>,
+            },
+            {
+                path: 'all-users',
+                element: <AllUsers></AllUsers>,
+            },
+           
+            //user routes
+            {
+                path: 'user-home',
+                element: <UserHome></UserHome>,
+            },
+            {
+                path: 'reservation',
+                element: <Reservation></Reservation>,
+            },
+            {
+                path: 'payment-history',
+                element: <PaymentHistory></PaymentHistory>,
+            },
+            {
+                path: 'my-cart',
+                element: <PrivateRoute><MyCart></MyCart></PrivateRoute>,
+            },
+            {
+                path: 'add-review',
+                element: <AddReview></AddReview>,
+            },
+            {
+                path: 'my-booking',
+                element: <MyBooking></MyBooking>,
+            },
         ]
     }
 ]);

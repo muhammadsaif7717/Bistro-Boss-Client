@@ -22,7 +22,7 @@ const NavBar = () => {
         <NavLink to={`/menu`}>Menu</NavLink>
         <NavLink to={`/shop/salad`}>Shop</NavLink>
         <NavLink to={`/secret`}>Secret</NavLink>
-        <NavLink to={`/dashboard/cart`}>
+        <NavLink to={`/dashboard/my-cart`}>
             <button className="btn">
                 <TiShoppingCart className="text-2xl"/>
                 <div className="badge badge-secondary">+{ cart.length}</div>
