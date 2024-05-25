@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import './Login.css'
 import { AuthContext } from '../../Providers/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import SocialLogin from '../SocialLogin/SocialLogin';
 
 
 const Login = () => {
@@ -109,6 +110,9 @@ const Login = () => {
                                 <input type="submit" value="Login" className="btn btn-primary" />
                             </div>
                         </form>
+                        <div>
+                            <SocialLogin></SocialLogin>
+                        </div>
                         <div className='flex justify-center  w-full mt-4'>
                             <span>New to Bistro Boss? Please <Link to={`/sign-up`} className='text-blue-600'>Sign Up</Link></span>
                         </div>

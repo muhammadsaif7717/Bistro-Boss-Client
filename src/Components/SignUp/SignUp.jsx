@@ -5,8 +5,11 @@ import { Helmet } from 'react-helmet-async';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
+import useAxiosPublic from '../../Hooks/useAxiosPublic';
+import SocialLogin from '../SocialLogin/SocialLogin';
 
 const SignUp = () => {
+    const axiosPublic = useAxiosPublic();
     const location = useLocation();
     const navigate = useNavigate();
     const { createNewUser, updateUserProfile } = useContext(AuthContext)
@@ -33,13 +36,26 @@ const SignUp = () => {
                 // update user profile
                 updateUserProfile(data.name, data.photo)
                     .then(() => {
-                        Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "New User Created",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email,
+                            photo: data.photo,
+                        }
+                        //post user to DB
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: "New User Created",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                }
+                            })
+
+                        // then navigate
                         setTimeout(() => {
                             navigate(location?.state?.from || '/');
                         }, 1700);
@@ -131,6 +147,9 @@ const SignUp = () => {
                                 <input type="submit" value="Sign Up" className="btn btn-primary" />
                             </div>
                         </form>
+                        <div>
+                            <SocialLogin></SocialLogin>
+                        </div>
                         <div className='flex justify-center w-full mt-4'>
                             <span>Already have an account? <Link to="/login" className='text-blue-600'>Login</Link></span>
                         </div>
