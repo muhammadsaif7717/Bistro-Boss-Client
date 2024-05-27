@@ -32,7 +32,7 @@ const UpdateItem = () => {
             }
         });
         console.log(res.data)
-        if (res.data.success) {
+        if (res.data.success) {   
             const item = {
                 name: data.name,
                 recipe: data.details,
