@@ -1,20 +1,24 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { FaUtensils } from "react-icons/fa";
+import { useLoaderData, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import useAxiosSecret from "../../../Hooks/useAxiosSecret";
-import Swal from "sweetalert2";
-
+import { useForm } from "react-hook-form";
+import { FaUtensils } from "react-icons/fa";
+import { useState } from "react";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
-const AddItem = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+const UpdateItem = () => {
+    const { id } = useParams()
+    const items = useLoaderData();
+    const clickedItem = items.find(item => item._id === id)
+
+
     const [imageURL, setImageURL] = useState(null);
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecret();
-
 
 
     const onSubmit = async (data) => {
@@ -37,13 +41,13 @@ const AddItem = () => {
                 price: parseFloat(data.price),
             }
             console.log(item)
-            //post
-            const resItem = await axiosSecure.post('/menu', item)
-            if (resItem.data.insertedId) {
+            // update item to database
+            const resItem = await axiosSecure.patch(`/menu/${clickedItem._id}`, item)
+            if (resItem.data.modifiedCount>0) {
                 Swal.fire({
                     position: "center",
                     icon: "success",
-                    title: "Item Added",
+                    title: "Item updated",
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -62,7 +66,7 @@ const AddItem = () => {
 
     return (
         <div>
-            <h2 className="text-4xl font-semibold text-center">Add Item</h2>
+            <h2 className="text-4xl font-semibold text-center">Update Item: {clickedItem.name}</h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="card-body p-0  w-full gap-5">
                 <div className="form-control">
@@ -72,7 +76,7 @@ const AddItem = () => {
                     <input
                         type="text"
                         {...register("name", { required: "Recipe Name is required" })}
-                        placeholder="Recipe Name"
+                        defaultValue={clickedItem.name}
                         className="input input-bordered"
                     />
                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
@@ -83,10 +87,11 @@ const AddItem = () => {
                             Category <b className="text-red-500">*</b>
                         </label>
                         <select
+                            defaultValue={clickedItem.category}
                             {...register("category", { required: "Category is required" })}
                             className="select w-full input input-bordered"
                         >
-                            <option value={``}>Select Category </option>
+                            <option>Select Category</option>
                             <option value="salad">Salad</option>
                             <option value="pizza">Pizza</option>
                             <option value="soup">Soup</option>
@@ -104,7 +109,7 @@ const AddItem = () => {
                         <input
                             type="number"
                             {...register("price", { required: "Price is required" })}
-                            placeholder="Price"
+                            defaultValue={clickedItem.price}
                             className="input input-bordered"
                         />
                         {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price.message}</p>}
@@ -114,7 +119,7 @@ const AddItem = () => {
                     <textarea
                         {...register("details", { required: "Details is required" })}
                         className="input input-bordered pt-2"
-                        placeholder="Recipe Details"
+                        defaultValue={clickedItem.recipe}
                     >
                     </textarea>
                     {errors.details && <p className="text-red-500 text-xs mt-1">{errors.details.message}</p>}
@@ -125,6 +130,7 @@ const AddItem = () => {
                         type="file"
                         {...register("image", { required: "Image is required" })}
                         onChange={handleImageChange}
+
                         className="file-input w-full max-w-xs"
                     />
                     {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image.message}</p>}
@@ -146,4 +152,4 @@ const AddItem = () => {
     );
 };
 
-export default AddItem;
+export default UpdateItem;

@@ -1,45 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
 import useAxiosSecret from "../../../Hooks/useAxiosSecret";
 import Swal from "sweetalert2";
-import { FaTrashAlt, FaUsers } from "react-icons/fa";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import useMenu from "../../../Hooks/useMenu";
+import { Link } from "react-router-dom";
 
 const ManageItem = () => {
     const axiosSecure = useAxiosSecret()
-    const { refetch, data: users = [] } = useQuery({
-        queryKey: ['users'],
-        queryFn: async () => {
-            const res = await axiosSecure.get('/users');
-            return res.data;
-        }
-    });
-
-
-    const handleMakeAdmin = (id) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, make Admin!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // delete from firebase
-                axiosSecure.patch(`/users/admin/${id}`)
-                    .then(res => {
-                        if (res.data.modifiedCount > 0) {
-                            Swal.fire({
-                                title: "Successfull!",
-                                text: "User is promoted to Admin.",
-                                icon: "success"
-                            });
-                            //refetch to refresh
-                            refetch();
-                        }
-                    })
-            }
-        });
+    const [items, loading, refetch] = useMenu();
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <span className="loading loading-bars loading-lg scale-110"></span>
+            </div>
+        );
     }
 
 
@@ -55,7 +28,7 @@ const ManageItem = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // delete from firebase
-                axiosSecure.delete(`/users/${id}`)
+                axiosSecure.delete(`/menu/${id}`)
                     .then(res => {
                         if (res.data.deletedCount > 0) {
                             Swal.fire({
@@ -73,10 +46,9 @@ const ManageItem = () => {
     }
 
     return (
-         <div>
+        <div>
             <div className="flex justify-evenly">
-                <h1 className="text-4xl font-semibold">All Users</h1>
-                <h1 className="text-4xl font-semibold">Total Users: {users.length}</h1>
+                <h1 className="text-4xl font-semibold">Total Menu Items: {items.length}</h1>
             </div>
 
             <div className="overflow-x-auto">
@@ -85,44 +57,42 @@ const ManageItem = () => {
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Action</th>
+                            <th>Item Image</th>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            users?.map((user, index) =>
-                                <tr key={user._id}>
+                            items?.map((menuItem, index) =>
+                                <tr key={menuItem._id}>
                                     <td>{index + 1}</td>
                                     <td>
                                         <div className="flex items-center">
                                             <div className="avatar">
                                                 <div className="mask mask-squircle w-12 h-12">
-                                                    <img src={user.photo} />
+                                                    <img src={menuItem.image} />
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <span>{user.name}</span>
+                                        <span>{menuItem.name}</span>
                                     </td>
 
                                     <td>
-                                        <span>{user.email}</span>
-                                    </td>
-                                    <td>
-                                        {
-                                            user.role==='admin'? 'Admin':
-                                            <button onClick={() => handleMakeAdmin(user._id)} className="btn btn-ghost text-red-500"><FaUsers></FaUsers></button>
-                                        }
+                                        <span>{menuItem.price}</span>
                                     </td>
 
                                     <td>
-                                        <button onClick={() => handleDelete(user._id)} className="btn btn-ghost text-red-500"><FaTrashAlt></FaTrashAlt></button>
+                                        <Link to={`/dashboard/update-item/${menuItem._id}`} className="btn btn-ghost text-red-500"><FaEdit></FaEdit></Link>
+                                    </td>
+
+                                    <td>
+                                        <button onClick={() => handleDelete(menuItem._id)} className="btn btn-ghost text-red-500"><FaTrashAlt></FaTrashAlt></button>
                                     </td>
                                 </tr>
                             )

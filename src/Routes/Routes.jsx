@@ -20,6 +20,7 @@ import PaymentHistory from "../Components/Dashboard/PaymentHistory/PaymentHistor
 import AddReview from "../Components/Dashboard/AddReview/AddReview";
 import MyBooking from "../Components/Dashboard/MyBooking/MyBooking";
 import AdminRiute from "./AdminRiute";
+import UpdateItem from "../Components/Dashboard/UpdateItem/UpdateItem";
 
 const router = createBrowserRouter([
     //Ui routes
@@ -68,6 +69,11 @@ const router = createBrowserRouter([
             {
                 path: 'add-item',
                 element: <AdminRiute><AddItem></AddItem></AdminRiute>,
+            },
+            {
+                path: 'update-item/:id',
+                element: <AdminRiute><UpdateItem></UpdateItem></AdminRiute>,
+                loader: ()=>fetch(`http://localhost:5000/menu`)
             },
             {
                 path: 'manage-item',
