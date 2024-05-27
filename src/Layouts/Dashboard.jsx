@@ -55,7 +55,7 @@ const Dashboard = () => {
                 <ul className="menu pb-0  flex flex-col md:gap-2">
                     <li><Link to={`/`}> <IoHome /> HOME</Link></li>
                     <li><Link to={`/menu`}> <TiThMenu /> MENU</Link></li>
-                    <li><Link to={`/`}> <FaShoppingBag /> SHOP</Link></li>
+                    <li><Link to={`/shop/salad`}> <FaShoppingBag /> SHOP</Link></li>
                     <li><Link to={`/`}> <IoMdMail /> CONTACT</Link></li>
                 </ul>
             </div>

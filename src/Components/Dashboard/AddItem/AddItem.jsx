@@ -89,12 +89,12 @@ const AddItem = () => {
                             <option value="" >
                                 Select Category
                             </option>
-                            <option value="Salad">salad</option>
-                            <option value="Pizza">pizza</option>
-                            <option value="Soup">soup</option>
-                            <option value="Dessert">dessert</option>
-                            <option value="Drink">drinks</option>
-                            <option value="Popular">popular</option>
+                            <option value="salad">Salad</option>
+                            <option value="pizza">Pizza</option>
+                            <option value="soup">Soup</option>
+                            <option value="dessert">Dessert</option>
+                            <option value="drink">Drinks</option>
+                            <option value="popular">Popular</option>
                         </select>
                         {errors.category && (
                             <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>
