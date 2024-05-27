@@ -19,6 +19,7 @@ import Reservation from "../Components/Dashboard/Reservation/Reservation";
 import PaymentHistory from "../Components/Dashboard/PaymentHistory/PaymentHistory";
 import AddReview from "../Components/Dashboard/AddReview/AddReview";
 import MyBooking from "../Components/Dashboard/MyBooking/MyBooking";
+import AdminRiute from "./AdminRiute";
 
 const router = createBrowserRouter([
     //Ui routes
@@ -62,25 +63,25 @@ const router = createBrowserRouter([
             //Admin routes
             {
                 path: 'admin-home',
-                element: <AdminHome></AdminHome>,
+                element: <AdminRiute><AdminHome></AdminHome></AdminRiute>,
             },
             {
                 path: 'add-item',
-                element: <AddItem></AddItem>,
+                element: <AdminRiute><AddItem></AddItem></AdminRiute>,
             },
             {
                 path: 'manage-item',
-                element: <ManageItem></ManageItem>,
+                element: <AdminRiute><ManageItem></ManageItem></AdminRiute>,
             },
             {
                 path: 'manage-booking',
-                element: <ManageBooking></ManageBooking>,
+                element: <AdminRiute><ManageBooking></ManageBooking></AdminRiute>,
             },
             {
                 path: 'all-users',
-                element: <AllUsers></AllUsers>,
+                element: <AdminRiute><AllUsers></AllUsers></AdminRiute>,
             },
-           
+
             //user routes
             {
                 path: 'user-home',

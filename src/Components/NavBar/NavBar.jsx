@@ -3,11 +3,13 @@ import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { TiShoppingCart } from "react-icons/ti";
 import useCart from "../../Hooks/useCart";
+import useAdmin from "../../Hooks/useAdmin";
 
 
 const NavBar = () => {
-    const [cart]=useCart()
+    const [cart] = useCart()
     const { user, logOutUser } = useContext(AuthContext)
+    const [isAdmin] = useAdmin();
 
     const handleLogOut = () => {
         logOutUser()
@@ -21,13 +23,23 @@ const NavBar = () => {
         <NavLink to={`/`}>Home</NavLink>
         <NavLink to={`/menu`}>Menu</NavLink>
         <NavLink to={`/shop/salad`}>Shop</NavLink>
-        <NavLink to={`/secret`}>Secret</NavLink>
-        <NavLink to={`/dashboard/my-cart`}>
-            <button className="btn">
-                <TiShoppingCart className="text-2xl"/>
-                <div className="badge badge-secondary">+{ cart.length}</div>
-            </button>
-        </NavLink>
+        <div>
+            {
+                (user && isAdmin) &&
+                <NavLink to={`/dashboard/admin-home`}>Secret</NavLink>
+            }
+        </div>
+        <div>
+            {
+                (user && !isAdmin) &&
+                <NavLink to={`/dashboard/my-cart`}>
+                    <button className="btn">
+                        <TiShoppingCart className="text-2xl" />
+                        <div className="badge badge-secondary">+{cart.length}</div>
+                    </button>
+                </NavLink>
+            }
+        </div>
     </div>
     return (
         <div className="navbar bg-black bg-opacity-30 text-white  fixed z-10 max-w-screen-xl mx-auto">
