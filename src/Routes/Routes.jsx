@@ -21,6 +21,7 @@ import AddReview from "../Components/Dashboard/AddReview/AddReview";
 import MyBooking from "../Components/Dashboard/MyBooking/MyBooking";
 import AdminRiute from "./AdminRiute";
 import UpdateItem from "../Components/Dashboard/UpdateItem/UpdateItem";
+import Payment from "../Components/Dashboard/Payment/Payment";
 
 const router = createBrowserRouter([
     //Ui routes
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
             {
                 path: 'reservation',
                 element: <Reservation></Reservation>,
+            },
+            {
+                path: 'payment',
+                element: <Payment></Payment>,
             },
             {
                 path: 'payment-history',
