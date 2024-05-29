@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import useAxiosSecret from "../../../Hooks/useAxiosSecret";
 import useCart from "../../../Hooks/useCart";
 import useAuth from "../../../Hooks/useAuth";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 
 const CheckoutForm = () => {
+    const navigate = useNavigate();
     const { user } = useAuth();
     const stripe = useStripe();
     const elements = useElements();
@@ -74,6 +77,34 @@ const CheckoutForm = () => {
             if (paymentIntent.status === 'succeeded') {
                 console.log('Your Payment Is Successfull', paymentIntent.id)
                 setTransactionId(paymentIntent.id)
+
+                //now save the payment in database
+                const payment = {
+                    email: user.email,
+                    price: totalPrice,
+                    transactionId: paymentIntent.id,
+                    date: new Date(), // utc date convert. use moment js
+                    cartIds: cart.map(item => item._id),
+                    menuItemIds: cart.map(item => item.menuId),
+                    status: 'pending'
+                }
+                const res = await axiosSecure.post(`/payments`, payment)
+                console.log(res.data)
+                if (res.data.paymentResult.insertedId) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Your Payment is Successfull",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    //navigate
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1700);
+                }
+
             }
         }
     }

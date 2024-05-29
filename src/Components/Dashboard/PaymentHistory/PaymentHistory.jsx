@@ -3,7 +3,7 @@
 const PaymentHistory = () => {
     return (
         <div>
-            PaymentHistory
+            <h2></h2>
         </div>
     );
 };
