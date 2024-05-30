@@ -13,7 +13,7 @@ const PaymentHistory = () => {
             return res.data;
         }
     })
-    console.log(payments)
+    // console.log(payments)
     return (
         <div>
             <h2>Total Payments: {payments?.length}</h2>

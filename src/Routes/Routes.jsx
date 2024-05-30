@@ -74,7 +74,7 @@ const router = createBrowserRouter([
             {
                 path: 'update-item/:id',
                 element: <AdminRiute><UpdateItem></UpdateItem></AdminRiute>,
-                loader: ()=>fetch(`http://localhost:5000/menu`)
+                loader: () => fetch(`https://bistro-boss-delta.vercel.app/menu`)
             },
             {
                 path: 'manage-item',

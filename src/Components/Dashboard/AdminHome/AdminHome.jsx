@@ -106,7 +106,7 @@ const AdminHome = () => {
 
 
     const pieChartData = orderStats.map(data => ({ name: data.category, value: data.quantity }));
-    console.log("pieChartData", pieChartData);
+    // console.log("pieChartData", pieChartData);
 
 
     return (

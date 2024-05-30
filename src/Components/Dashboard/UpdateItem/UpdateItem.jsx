@@ -24,14 +24,14 @@ const UpdateItem = () => {
     const onSubmit = async (data) => {
         //upload image to imbb and get aurl
         const imageFile = { image: data.image[0] };
-        console.log(imageFile)
+        // console.log(imageFile)
 
         const res = await axiosPublic.post(image_hosting_api, imageFile, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.success) {   
             const item = {
                 name: data.name,
@@ -40,7 +40,7 @@ const UpdateItem = () => {
                 category: data.category,
                 price: parseFloat(data.price),
             }
-            console.log(item)
+            // console.log(item)
             // update item to database
             const resItem = await axiosSecure.patch(`/menu/${clickedItem._id}`, item)
             if (resItem.data.modifiedCount>0) {

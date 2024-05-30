@@ -29,8 +29,8 @@ const SignUp = () => {
 
         // create new user
         createNewUser(data.email, data.password)
-            .then(res => {
-                console.log('New User Created', res.user)
+            .then(() => {
+                // console.log('New User Created', res.user)
             })
             .then(() => {
                 // update user profile
@@ -59,7 +59,7 @@ const SignUp = () => {
                         setTimeout(() => {
                             navigate(location?.state?.from || '/');
                         }, 1700);
-                        console.log('Profile Updated')
+                        // console.log('Profile Updated')
                     })
                     .catch(err => {
                         Swal.fire({

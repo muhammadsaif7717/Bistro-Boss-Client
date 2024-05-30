@@ -27,7 +27,7 @@ const AddItem = () => {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.success) {
             const item = {
                 name: data.name,
@@ -36,7 +36,7 @@ const AddItem = () => {
                 category: data.category,
                 price: parseFloat(data.price),
             }
-            console.log(item)
+            // console.log(item)
             //post
             const resItem = await axiosSecure.post('/menu', item)
             if (resItem.data.insertedId) {

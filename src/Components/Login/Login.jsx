@@ -22,7 +22,7 @@ const Login = () => {
 
 
     const onSubmit = (data) => {
-        console.log(data);
+        // console.log(data);
 
         // veryfy captcha
         const isValidCaptcha = validateCaptcha(data.captcha);
