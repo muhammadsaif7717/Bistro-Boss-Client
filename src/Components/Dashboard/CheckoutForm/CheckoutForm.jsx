@@ -20,15 +20,17 @@ const CheckoutForm = () => {
     const [transactionId, setTransactionId] = useState("");
 
     useEffect(() => {
-        // Create PaymentIntent as soon as the page loads
-        axiosSecure.post('/create-payment-intent', { price: totalPrice })
-            .then((res) => {
-                console.log(res.data.clientSecret)
-                setClientSecret(res.data.clientSecret)
-            })
-            .catch(error => {
-                console.error("Error creating payment intent:", error);
-            });
+        if (totalPrice > 0) {
+            // Create PaymentIntent as soon as the page loads
+            axiosSecure.post('/create-payment-intent', { price: totalPrice })
+                .then((res) => {
+                    console.log(res.data.clientSecret)
+                    setClientSecret(res.data.clientSecret)
+                })
+                .catch(error => {
+                    console.error("Error creating payment intent:", error);
+                });
+        }
     }, [axiosSecure, totalPrice]);
 
     const handleSubmit = async (e) => {
@@ -101,7 +103,7 @@ const CheckoutForm = () => {
 
                     //navigate
                     setTimeout(() => {
-                        navigate('/');
+                        navigate('/dashboard/payment-history');
                     }, 1700);
                 }
 

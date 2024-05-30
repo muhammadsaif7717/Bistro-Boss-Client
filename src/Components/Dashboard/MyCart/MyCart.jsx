@@ -42,11 +42,11 @@ const MyCart = () => {
     return (
         <div>
             <div className="flex justify-evenly">
-                <h2 className='text-3xl'>Items: {cart.length}</h2>
+                <h2 className='text-3xl'>Items: {cart?.length}</h2>
                 <h2 className='text-3xl'>Total Price: {totalPrice}</h2>
                 <div>
                     {
-                        cart.length ?
+                        cart?.length ?
                             <Link to={`/dashboard/payment`} className="btn btn-primary">Pay</Link>
                             :
                             <button disabled className="btn btn-primary">Pay</button>
@@ -82,11 +82,11 @@ const MyCart = () => {
                                     </td>
 
                                     <td>
-                                        <span>${item.name}</span>
+                                        <span>{item?.name}</span>
                                     </td>
 
                                     <td>
-                                        <span>${item.price}</span>
+                                        <span>${item?.price}</span>
                                     </td>
 
                                     <td>
